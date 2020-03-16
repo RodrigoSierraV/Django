@@ -41,6 +41,7 @@ INSTALLED_APPS = [
 
     #Created apps
     'posts',
+    'users',
 ]
 
 MIDDLEWARE = [
