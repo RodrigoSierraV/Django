@@ -1,5 +1,11 @@
-{% for post in posts %}
-    <strong> {{ post.name}} </strong> <br><br>
-    <img src={{ post.picture }}>
-    <p>{{ post.user }} {{ post.timestamp }}</p>
-{% endfor %}
+
+{% block content %}
+  <h2>Choose Airline</h2>
+  <form action=flights/ method="post" novalidate>
+    {% csrf_token %}
+    <table>
+      {{ form.as_table }}
+    </table>
+    <button type="submit">Submit</button>
+  </form>
+{% endblock %}

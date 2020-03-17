@@ -28,4 +28,5 @@ urlpatterns = [
     #Views from posts
 
     path('posts/', posts_views.list_posts),
+    path('posts/flights/', posts_views.book_flights, name='book_flights'),
 ]

@@ -1,19 +1,19 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from datetime import datetime
+import flightradar24
 
-posts = [
-    {
-        'name': 'Mont Blanc',
-        'user': 'Rodri',
-        'timestamp': datetime.now().strftime('%b %d, %Y - %H:%M'),
-        'picture': 'https://i.picsum.photos/id/903/200/200.jpg'
-    }
-]
+from . forms import AirlineForm
 
 def list_posts(request):
-    return render(request, 'feed.html', {'posts':posts})
+    form = AirlineForm()
+    return render(request, 'feed.html', {'form': form })
 
+def book_flights(request):
+    fr = flightradar24.Api()
+    print(request.POST, 'whaaat')
+    flights = fr.get_flights(request.POST['choose_airline'])
+    return render(request, 'flights.html', {'flights': flights.items()})
 #    def list_posts(request):
 #        content = []
 #        for post in posts:
