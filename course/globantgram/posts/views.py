@@ -11,8 +11,9 @@ def list_posts(request):
 
 def book_flights(request):
     fr = flightradar24.Api()
-    print(request.POST, 'whaaat')
+    print(dir(fr))
     flights = fr.get_flights(request.POST['choose_airline'])
+    print(dir(flights))
     return render(request, 'flights.html', {'flights': flights.items()})
 #    def list_posts(request):
 #        content = []
