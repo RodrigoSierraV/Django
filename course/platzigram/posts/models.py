@@ -12,3 +12,10 @@ class User(models.Model):
     birth_date = models.DateField(blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
+    country = models.CharField(max_length=100, blank=True)
+    city = models.CharField(max_length=100, blank=True)
+
+    is_admin = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.email
