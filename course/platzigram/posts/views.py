@@ -38,7 +38,7 @@ posts = [
 
 
 def list_posts(request):
-    return render(request, 'feeds.html', {'posts': posts})
+    return render(request, 'posts/feed.html', {'posts': posts})
 
 #def list_posts(request):
 #    content = []

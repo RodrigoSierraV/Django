@@ -19,6 +19,7 @@ from platzigram import views as local_views
 from posts import views as post_views
 from django.conf.urls.static import static
 from django.conf import settings
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('hello/', local_views.hello),
