@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.utils import IntegrityError
 from django.contrib.auth.models import User
 from users.models import Profile
-from users.forms import ProfileForm
+from users.forms import ProfileForm, SignupForm
 # Create your views here.
 
 def login_view(request):
@@ -54,26 +54,11 @@ def update_profile(request):
 def signup_view(request):
     """Sign up view."""
     if request.method == 'POST':
-        username = request.POST['username']
-        passwd = request.POST['passwd']
-        passwd_confirmation = request.POST['passwd_confirmation']
+        form = SignupForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')
+    else:
+        form = SignupForm()
 
-        if passwd != passwd_confirmation:
-            return render(request, 'users/signup.html', {'error': 'Password confirmation does not match'})
-
-        try:
-            user = User.objects.create_user(username=username, password=passwd)
-        except IntegrityError:
-            return render(request, 'users/signup.html', {'error': 'Username is already in use'})
-
-        user.first_name = request.POST['first_name']
-        user.last_name = request.POST['last_name']
-        user.email = request.POST['email']
-        user.save()
-
-        profile = Profile(user=user)
-        profile.save()
-
-        return redirect('login')
-
-    return render(request, 'users/signup.html')
+    return render(request, 'users/signup.html', {'form': form})
