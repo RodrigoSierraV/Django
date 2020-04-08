@@ -9,6 +9,9 @@ tornado==4.2
 # Django
 django>=2.2.10
 
+#Django rest-framework
+djangorestframework==3.11.0
+
 # Environment
 django-environ==0.4.5
 
