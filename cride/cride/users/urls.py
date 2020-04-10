@@ -1,13 +1,8 @@
-from django.urls import path
+from rest_framework.routers import DefaultRouter  
 
-from cride.users.views import (
-    UserLoginAPIView,
-    UserSignUpAPIView,
-    AccountVerificationAPIView
-)
+from cride.users.views import UserViewSet
 
-urlpatterns = [
-    path('users/login/', UserLoginAPIView.as_view(), name='login'),
-    path('users/signup/', UserSignUpAPIView.as_view(), name='signup'),
-    path('users/verify/', AccountVerificationAPIView.as_view(), name='verify'),
-]
+
+router = DefaultRouter()
+router.register(r'users', UserViewSet, 'users')
+urlpatterns = router.urls
