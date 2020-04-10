@@ -1,14 +1,20 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, mixins
+
 from rest_framework.permissions import IsAuthenticated
+from cride.circles.permissions.circles import IsCircleAdmin
+
 from cride.circles.serializers import CircleModelSerializer
 
 from cride.circles.models import Circle, Membership
 
 
-class CircleViewSet(viewsets.ModelViewSet):
+class CircleViewSet(mixins.CreateModelMixin,
+                    mixins.ListModelMixin,
+                    mixins.RetrieveModelMixin,
+                    mixins.UpdateModelMixin,
+                    viewsets.GenericViewSet):
 
     serializer_class = CircleModelSerializer
-    permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         """List only public circles"""
@@ -32,3 +38,11 @@ class CircleViewSet(viewsets.ModelViewSet):
             is_admin=True,
             remaining_invitations=10
         )
+
+    def get_permissions(self):
+        """Assign permissions based on actions"""
+        permissions = [IsAuthenticated]
+
+        if self.action in ['update', 'partial_update']:
+            permissions.append(IsCircleAdmin)
+        return [permission() for permission in permissions]

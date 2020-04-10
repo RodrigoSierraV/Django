@@ -13,12 +13,6 @@ class CircleModelSerializer(serializers.ModelSerializer):
 
     is_limited = serializers.BooleanField(default=False)
 
-    read_only_fields = (
-        'is_public',
-        'verified',
-        'rides_offered',
-        'rides_taken'
-    )
     class Meta:
         
         model = Circle
@@ -30,11 +24,18 @@ class CircleModelSerializer(serializers.ModelSerializer):
             'is_limited', 'members_limit'
         )
 
-    def validate(self, data):
-        """Ensures members limit"""
-        members_limit = data.get('members_limit', None)
-        is_limited = data.get('members_limit', None)
+        read_only_fields = (
+        'is_public',
+        'verified',
+        'rides_offered',
+        'rides_taken'
+        )
 
-        if bool(members_limit) ^ is_limited:
+    def validate(self, data):
+        """Ensures members_limit and is_limited are present"""
+        members_limit = data.get('members_limit', None)
+        is_limited = data.get('is_limited', False)
+
+        if  is_limited ^ bool(members_limit):
             raise serializers.ValidationError("If circle is limited a member's limit must be provided")
         return data
