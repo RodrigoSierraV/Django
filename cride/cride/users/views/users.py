@@ -8,6 +8,7 @@ from rest_framework.permissions import (
     IsAuthenticated,
 )
 
+from cride.users.serializers.profiles import ProfileModelSerializer
 from cride.users.serializers import (
     UserLoginSerializer,
     UserModelSerializer,
@@ -19,6 +20,7 @@ from cride.circles.models import Circle
 from cride.circles.serializers import CircleModelSerializer
 
 class UserViewSet(mixins.RetrieveModelMixin,
+                  mixins.UpdateModelMixin,
                   viewsets.GenericViewSet):
 
     queryset = User.objects.filter(is_active=True, is_client=True)
@@ -55,11 +57,27 @@ class UserViewSet(mixins.RetrieveModelMixin,
         data = {'message': 'Congratulation, now go share some rides!'}
         return Response(data, status=status.HTTP_200_OK)
 
+    @action(detail=True, methods=['put', 'patch'])
+    def profile(self, request, *args, **kwargs):
+        """Update profile data"""
+        user = self.get_object()
+        profile = user.profile
+        partial = request.method == 'PATCH'
+        serializer = ProfileModelSerializer(
+            profile,
+            data=request.data,
+            partial=partial
+        )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        data = UserModelSerializer(user).data
+        return Response(data)
+
     def get_permissions(self):
         """Assigns permissions based on actions"""
         if self.action in ['signup', 'login', 'verify']:
             permissions = [AllowAny]
-        elif self.action == 'retrieve':
+        elif self.action in ['retrieve', 'update', 'partial_update']:
             permissions = [IsAuthenticated, IsAccountOwner]
         else:
             permissions = [IsAuthenticated]
