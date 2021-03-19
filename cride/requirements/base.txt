@@ -13,7 +13,7 @@ pyjwt==1.7.1
 django>=2.2.10
 
 #Django rest-framework
-djangorestframework==3.11.0
+djangorestframework==3.11.2
 
 # Environment
 django-environ==0.4.5
