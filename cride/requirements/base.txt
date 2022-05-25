@@ -7,7 +7,7 @@ nbconvert==5.3.1
 tornado==4.2
 
 # JWT
-pyjwt==1.7.1
+pyjwt==2.4.0
 
 # Django
 django>=2.2.10
